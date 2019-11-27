@@ -1,21 +1,21 @@
-package br.edu.ifsc.canoinhas.server.dao;
+package br.edu.ifsc.canoinhas.server.modelDao;
 
 import java.util.List;
 import javax.persistence.EntityManager;
 import br.edu.ifsc.canoinhas.server.entities.Usuario;
 
 
-public class DaoDBUsuario {
+public class DaoUsuario {
 
-	private static DaoDBUsuario controllerDBUsuario;
+	private static DaoUsuario controllerDBUsuario;
 	private List<Usuario> listUsuario;
 
-	public DaoDBUsuario() {
+	public DaoUsuario() {
 	}
 
-	public static DaoDBUsuario getInstance() {
+	public static DaoUsuario getInstance() {
 		if (controllerDBUsuario == null) {
-			controllerDBUsuario = new DaoDBUsuario();
+			controllerDBUsuario = new DaoUsuario();
 		}
 		return controllerDBUsuario;
 	}

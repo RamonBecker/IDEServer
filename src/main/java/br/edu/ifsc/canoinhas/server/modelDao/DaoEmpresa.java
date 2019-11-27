@@ -1,4 +1,4 @@
-package br.edu.ifsc.canoinhas.server.dao;
+package br.edu.ifsc.canoinhas.server.modelDao;
 
 import java.util.List;
 
@@ -7,13 +7,13 @@ import javax.persistence.EntityManager;
 import br.edu.ifsc.canoinhas.server.entities.Empresa;
 
 
-public class DaoDBEmpresa {
-	private static DaoDBEmpresa controllerDBEmpresa;
+public class DaoEmpresa {
+	private static DaoEmpresa controllerDBEmpresa;
 	private List<Empresa> listEmpresa;
 
-	public static DaoDBEmpresa getInstance() {
+	public static DaoEmpresa getInstance() {
 		if (controllerDBEmpresa == null) {
-			controllerDBEmpresa = new DaoDBEmpresa();
+			controllerDBEmpresa = new DaoEmpresa();
 		}
 		return controllerDBEmpresa;
 	}

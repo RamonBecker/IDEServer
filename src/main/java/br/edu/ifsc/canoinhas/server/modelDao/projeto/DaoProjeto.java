@@ -1,19 +1,21 @@
-package br.edu.ifsc.canoinhas.server.dao;
+package br.edu.ifsc.canoinhas.server.modelDao.projeto;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
+
 import br.edu.ifsc.canoinhas.server.entities.Classe;
 import br.edu.ifsc.canoinhas.server.entities.Pacote;
 import br.edu.ifsc.canoinhas.server.entities.Projeto;
+import br.edu.ifsc.canoinhas.server.modelDao.Conn;
 import br.edu.ifsc.canoinhas.server.utility.StringUtility;
 
-public class DaoDBProjeto {
-	private List<Projeto> listProjeto;
+public class DaoProjeto {
+	private static List<Projeto> listProjeto;
 
-	public DaoDBProjeto() {
+	public DaoProjeto() {
 	}
 
 //	public void addProjeto(String nameProject, String localProject) {
@@ -50,50 +52,55 @@ public class DaoDBProjeto {
 			em.getTransaction().begin();
 			em.persist(projeto);
 			em.getTransaction().commit();
-			
+
 			out.writeUTF(StringUtility.ok);
-			
+
 		} catch (IllegalArgumentException e) {
 			out.writeUTF(e.getMessage());
-			
+
 		} finally {
 			em.close();
 		}
-		
 
 	}
-	
-	
-	
+
 	public List<Projeto> getAllProjeto() {
-		
-		List<Projeto> listProjeto = new ArrayList<Projeto>();
+
+		if (listProjeto == null) {
+			listProjeto = new ArrayList<Projeto>();
+		}
+
 		EntityManager em = Conn.getEntityManager();
 
 		listProjeto = em.createQuery("SELECT PT FROM Projeto AS PT", Projeto.class).getResultList();
 		em.close();
-		
+
 		return listProjeto;
 	}
-	
+
 	public void getAllProjetoSubmitClient(ObjectOutputStream out) throws IOException {
 		String mensagem = "";
-		
+
 		List<Projeto> listProjeto = getAllProjeto();
-		
-		if(listProjeto == null) {
+
+		if (listProjeto == null) {
 			out.writeUTF(StringUtility.erro);
-		}else {
+		} else {
 			for (Projeto projeto : listProjeto) {
-				 mensagem = mensagem.concat("-"+projeto.getId()+";"+projeto.getNome()+";"+projeto.getLocation());
+				mensagem = mensagem
+						.concat("-" + projeto.getId() + ";" + projeto.getNome() + ";" + projeto.getLocation());
 			}
 		}
 		
-		out.writeUTF(mensagem);
+		if(mensagem.isEmpty()) {
+			out.writeUTF("404");
+		}else {
+			out.writeUTF(mensagem);
+		}
+		
+		
 	}
 
-	
-	
 	private void loadListProjeto() {
 
 		EntityManager em = Conn.getEntityManager();

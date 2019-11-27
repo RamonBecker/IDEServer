@@ -1,19 +1,19 @@
-package br.edu.ifsc.canoinhas.server.dao;
+package br.edu.ifsc.canoinhas.server.modelDao;
 
 import java.util.List;
 import javax.persistence.EntityManager;
 import br.edu.ifsc.canoinhas.server.entities.Ocorrencia;
 
-public class DaoDBOcorrencia {
-	private static DaoDBOcorrencia controllerDBOcorrencia;
+public class DaoOcorrencia {
+	private static DaoOcorrencia controllerDBOcorrencia;
 	private List<Ocorrencia> listOcorrencias;
 
-	private DaoDBOcorrencia() {
+	private DaoOcorrencia() {
 	}
 
-	public static DaoDBOcorrencia getInstance() {
+	public static DaoOcorrencia getInstance() {
 		if (controllerDBOcorrencia == null) {
-			controllerDBOcorrencia = new DaoDBOcorrencia();
+			controllerDBOcorrencia = new DaoOcorrencia();
 		}
 		return controllerDBOcorrencia;
 	}

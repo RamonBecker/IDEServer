@@ -10,11 +10,13 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
-import br.edu.ifsc.canoinhas.server.dao.Conn;
-import br.edu.ifsc.canoinhas.server.dao.DaoDBProjeto;
+
 import br.edu.ifsc.canoinhas.server.exceptions.CommException;
 import br.edu.ifsc.canoinhas.server.exceptions.NetDeviceException;
 import br.edu.ifsc.canoinhas.server.exceptions.PortException;
+import br.edu.ifsc.canoinhas.server.modelDao.Conn;
+import br.edu.ifsc.canoinhas.server.modelDao.projeto.DaoPacote;
+import br.edu.ifsc.canoinhas.server.modelDao.projeto.DaoProjeto;
 
 public class Main {
 
@@ -74,7 +76,7 @@ public class Main {
 		}
 
 		if (recebido[0].contentEquals("projeto")) {
-			DaoDBProjeto daoProjeto = new DaoDBProjeto();
+			DaoProjeto daoProjeto = new DaoProjeto();
 
 			if (recebido[1].contentEquals("add")) {
 
@@ -84,6 +86,15 @@ public class Main {
 
 			if (recebido[1].contentEquals("getAll")) {
 				daoProjeto.getAllProjetoSubmitClient(out);
+			}
+
+		}
+
+		if (recebido[0].contentEquals("pacote")) {
+			DaoPacote daoPacote = new DaoPacote();
+
+			if (recebido[1].contentEquals("add")) {
+				daoPacote.addPackage(recebido[2], recebido[3]);
 			}
 
 		}
