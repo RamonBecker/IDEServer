@@ -87,12 +87,12 @@ public class DaoProjeto {
 			out.writeUTF(StringUtility.erro);
 		} else {
 			for (Projeto projeto : listProjeto) {
-				mensagem = mensagem
-						.concat("-" + projeto.getId() + ";" + projeto.getNome() + ";" + projeto.getLocation());
+				mensagem = mensagem.concat(
+						"-" + projeto.getId() + ";" + projeto.getNome() + ";" + projeto.getLocation() + ";");
 
 				for (Pacote pacote : projeto.getListPacote()) {
 					if (pacote != null) {
-						mensagem = mensagem.concat("|" + pacote.getId() + ";" + pacote.getNome());
+						mensagem = mensagem.concat(pacote.getId() + "," + pacote.getNome()+",");
 					}
 				}
 
