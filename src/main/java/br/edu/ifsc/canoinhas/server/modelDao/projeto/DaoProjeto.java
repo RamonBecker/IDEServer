@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 
+import org.hibernate.Hibernate;
+
 import br.edu.ifsc.canoinhas.server.entities.Classe;
 import br.edu.ifsc.canoinhas.server.entities.Pacote;
 import br.edu.ifsc.canoinhas.server.entities.Projeto;
@@ -13,7 +15,6 @@ import br.edu.ifsc.canoinhas.server.modelDao.Conn;
 import br.edu.ifsc.canoinhas.server.utility.StringUtility;
 
 public class DaoProjeto {
-	private static List<Projeto> listProjeto;
 
 	public DaoProjeto() {
 	}
@@ -66,13 +67,12 @@ public class DaoProjeto {
 
 	public List<Projeto> getAllProjeto() {
 
-		if (listProjeto == null) {
-			listProjeto = new ArrayList<Projeto>();
-		}
+		List<Projeto> listProjeto = new ArrayList<Projeto>();
 
 		EntityManager em = Conn.getEntityManager();
 
-		listProjeto = em.createQuery("SELECT PT FROM Projeto AS PT", Projeto.class).getResultList();
+		listProjeto = em.createQuery("FROM Projeto", Projeto.class).getResultList();
+
 		em.close();
 
 		return listProjeto;
@@ -89,84 +89,22 @@ public class DaoProjeto {
 			for (Projeto projeto : listProjeto) {
 				mensagem = mensagem
 						.concat("-" + projeto.getId() + ";" + projeto.getNome() + ";" + projeto.getLocation());
+
+				for (Pacote pacote : projeto.getListPacote()) {
+					if (pacote != null) {
+						mensagem = mensagem.concat("|" + pacote.getId() + ";" + pacote.getNome());
+					}
+				}
+
 			}
 		}
-		
-		if(mensagem.isEmpty()) {
+
+		if (mensagem.isEmpty()) {
 			out.writeUTF("404");
-		}else {
+		} else {
 			out.writeUTF(mensagem);
 		}
-		
-		
-	}
 
-	private void loadListProjeto() {
-
-		EntityManager em = Conn.getEntityManager();
-
-		listProjeto = em.createQuery("SELECT PT FROM Projeto AS PT", Projeto.class).getResultList();
-
-		System.out.println(listProjeto);
-		em.close();
-	}
-
-	private Boolean checkProjeto(String nameProject, String localProject) {
-
-		loadListProjeto();
-
-		if (!listProjeto.isEmpty()) {
-			for (Projeto projeto : listProjeto) {
-				if (projeto.getNome().equals(nameProject) && projeto.getLocation().equals(localProject)) {
-					return true;
-				}
-			}
-		}
-
-		return false;
-	}
-
-	public List<Projeto> getListProjeto() {
-		loadListProjeto();
-		return listProjeto;
-	}
-
-	public void addPackageToProject(Projeto projeto, String namePackage) {
-
-		if (projeto != null) {
-			System.out.println(projeto);
-			for (int i = 0; i < projeto.getListPacote().size(); i++) {
-				if (projeto.getListPacote().get(i).getNome().equals(namePackage)) {
-					// MessageAlert.mensagemErro(StringUtility.packageExisting);
-					return;
-				}
-			}
-
-			Pacote pacote = new Pacote(namePackage);
-			addProject(projeto, pacote);
-
-			// MessageAlert.mensagemRealizadoSucesso(StringUtility.pacoteCreate);
-		} else {
-			// MessageAlert.mensagemErro(StringUtility.projectNull);
-		}
-
-	}
-
-	public void addProject(Projeto projeto, Pacote pacote) {
-
-		if (projeto != null && pacote != null) {
-
-			EntityManager em = Conn.getEntityManager();
-			em.getTransaction().begin();
-
-			Projeto searchProjeto = em.find(Projeto.class, projeto.getId());
-			searchProjeto.getListPacote().add(pacote);
-			em.getTransaction().commit();
-			em.close();
-
-		} else {
-			// MessageAlert.mensagemErro(StringUtility.projectNull);
-		}
 	}
 
 	public void updateClasse(Projeto projeto, Pacote pacote, String nameClass, Boolean main, String typeClasse) {

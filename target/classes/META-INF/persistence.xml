@@ -7,11 +7,21 @@
 		<description>
             Persistence unit for the ORM class.
         </description>
-        
+
+		<class>br.edu.ifsc.canoinhas.server.entities.Projeto</class>
+		<class>br.edu.ifsc.canoinhas.server.entities.Pacote</class>
+		<class>br.edu.ifsc.canoinhas.server.entities.Classe</class>
+		<class>br.edu.ifsc.canoinhas.server.entities.Usuario</class>
+		<class>br.edu.ifsc.canoinhas.server.entities.Endereco</class>
+		<class>br.edu.ifsc.canoinhas.server.entities.Ocorrencia</class>
+
 		<properties>
-			<property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />
-			<property name="dialect" value="org.hibernate.dialect.SQLiteDialect" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:sqlite:db.sqlite" />
+			<property name="javax.persistence.jdbc.driver"
+				value="org.sqlite.JDBC" />
+			<property name="dialect"
+				value="org.hibernate.dialect.SQLiteDialect" />
+			<property name="javax.persistence.jdbc.url"
+				value="jdbc:sqlite:db.sqlite" />
 			<property name="javax.persistence.jdbc.user" value="" />
 			<property name="javax.persistence.jdbc.password" value="" />
 			<property name="hibernate.show_sql" value="true" />

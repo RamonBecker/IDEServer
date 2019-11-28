@@ -91,10 +91,17 @@ public class Main {
 		}
 
 		if (recebido[0].contentEquals("pacote")) {
+
 			DaoPacote daoPacote = new DaoPacote();
+			DaoProjeto daoProjeto = new DaoProjeto();
 
 			if (recebido[1].contentEquals("add")) {
 				daoPacote.addPackage(recebido[2], recebido[3]);
+				// daoProjeto.getAllProjetoSubmitClient(out);
+			}
+
+			if (recebido[1].contains("getAll")) {
+				daoPacote.submitGetAllPackageClient(out);
 			}
 
 		}
@@ -113,8 +120,8 @@ public class Main {
 //		}
 
 		out.flush();
-		out.close();
 		in.close();
+		out.close();
 
 	}
 
