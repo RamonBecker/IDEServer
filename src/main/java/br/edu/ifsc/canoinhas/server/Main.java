@@ -60,6 +60,8 @@ public class Main {
 	}
 
 	private static void process(Socket client) throws IOException {
+		System.out.println("------------------------------------------------------");
+
 		System.out.println("Cliente conectado: " + client.getInetAddress().getHostAddress());
 
 		ObjectInputStream in = new ObjectInputStream(client.getInputStream());
@@ -85,7 +87,7 @@ public class Main {
 			}
 
 			if (recebido[1].contentEquals("getAll")) {
-				daoProjeto.getAllProjetoSubmitClient(out);
+				daoProjeto.getAllProjetoSubmitClient(out, client);
 			}
 
 		}
@@ -93,17 +95,10 @@ public class Main {
 		if (recebido[0].contentEquals("pacote")) {
 
 			DaoPacote daoPacote = new DaoPacote();
-			DaoProjeto daoProjeto = new DaoProjeto();
 
 			if (recebido[1].contentEquals("add")) {
-				daoPacote.addPackage(recebido[2], recebido[3]);
-				// daoProjeto.getAllProjetoSubmitClient(out);
+				daoPacote.addPackage(recebido[2], recebido[3], out, client);
 			}
-
-			if (recebido[1].contains("getAll")) {
-				daoPacote.submitGetAllPackageClient(out);
-			}
-
 		}
 
 //		if (recebido[0].contentEquals("user")) {

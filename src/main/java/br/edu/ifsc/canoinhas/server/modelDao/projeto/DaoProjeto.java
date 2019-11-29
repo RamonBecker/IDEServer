@@ -2,6 +2,7 @@ package br.edu.ifsc.canoinhas.server.modelDao.projeto;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -78,21 +79,29 @@ public class DaoProjeto {
 		return listProjeto;
 	}
 
-	public void getAllProjetoSubmitClient(ObjectOutputStream out) throws IOException {
+	public void getAllProjetoSubmitClient(ObjectOutputStream out, Socket client) throws IOException {
+
 		String mensagem = "";
-
+		
+		
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+		System.out.println("Realizando consulta no Banco de Dados");
+		
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
 		List<Projeto> listProjeto = getAllProjeto();
-
+		
 		if (listProjeto == null) {
 			out.writeUTF(StringUtility.erro);
 		} else {
 			for (Projeto projeto : listProjeto) {
-				mensagem = mensagem.concat(
-						"-" + projeto.getId() + ";" + projeto.getNome() + ";" + projeto.getLocation() + ";");
+				mensagem = mensagem
+						.concat("-" + projeto.getId() + ";" + projeto.getNome() + ";" + projeto.getLocation() + ";");
 
 				for (Pacote pacote : projeto.getListPacote()) {
 					if (pacote != null) {
-						mensagem = mensagem.concat(pacote.getId() + "," + pacote.getNome()+",");
+						mensagem = mensagem.concat(pacote.getId() + "," + pacote.getNome() + ",");
 					}
 				}
 
@@ -104,6 +113,11 @@ public class DaoProjeto {
 		} else {
 			out.writeUTF(mensagem);
 		}
+		System.out.println("------------------------------------------------------");
+		System.out.println("Enviando pacote de dados de projetos para cliente: "
+				+ client.getInetAddress().getHostAddress() + "  Host Name: " + client.getInetAddress().getHostName());
+		System.out.println("------------------------------------------------------");
+		System.out.println("Pacote de dados enviado para cliente: " + mensagem);
 
 	}
 
