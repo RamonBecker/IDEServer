@@ -107,6 +107,10 @@ public class Main {
 			if (recebido[1].contentEquals("add")) {
 				daoPacote.addPackage(recebido[2], recebido[3], out, client);
 			}
+
+			if (recebido[1].contentEquals("edit")) {
+				daoPacote.editProject(recebido[2], recebido[3], out, client);
+			}
 		}
 
 		if (recebido[0].contentEquals("classe")) {

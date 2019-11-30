@@ -225,17 +225,7 @@ public class DaoDBProjeto {
 
 	}
 
-	public void editPacote(Pacote pacote) {
-		EntityManager em = Conn.getEntityManager();
-		em.getTransaction().begin();
 
-		Pacote pacoteSeach = em.find(Pacote.class, pacote.getId());
-
-		pacoteSeach.setNome(pacote.getNome());
-
-		em.getTransaction().commit();
-		em.close();
-	}
 
 	public void editClass(Classe classe) {
 		EntityManager em = Conn.getEntityManager();
