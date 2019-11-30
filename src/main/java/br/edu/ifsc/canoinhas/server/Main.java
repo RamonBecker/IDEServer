@@ -120,6 +120,10 @@ public class Main {
 				daoDbClasse.addClass(recebido[2], recebido[3], recebido[4], recebido[5], out, client);
 			}
 
+			if (recebido[1].contentEquals("edit")) {
+				daoDbClasse.editClass(recebido[2], recebido[3], out, client);
+			}
+
 		}
 
 //		if (recebido[0].contentEquals("user")) {

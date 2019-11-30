@@ -6,9 +6,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
-
-import org.hibernate.Hibernate;
-
 import br.edu.ifsc.canoinhas.server.dao.Conn;
 import br.edu.ifsc.canoinhas.server.entities.Classe;
 import br.edu.ifsc.canoinhas.server.entities.Pacote;
@@ -124,32 +121,32 @@ public class DaoDBProjeto {
 
 	}
 
-	public void updateClasse(Projeto projeto, Pacote pacote, String nameClass, Boolean main, String typeClasse) {
-		if (projeto != null && pacote != null) {
-
-			EntityManager em = Conn.getEntityManager();
-			em.getTransaction().begin();
-
-			Projeto searchProjeto = em.find(Projeto.class, projeto.getId());
-			// if (update.equals("Pacote")) {
-			Pacote searchPacote = null;
-
-			for (Pacote listPacote : searchProjeto.getListPacote()) {
-				if (listPacote.getNome().equals(pacote.getNome())) {
-					searchPacote = listPacote;
-					break;
-				}
-			}
-
-			searchPacote.addClass(nameClass, main, typeClasse);
-
-			em.getTransaction().commit();
-			em.close();
-
-		} else {
-			// MessageAlert.mensagemErro(StringUtility.projectNull);
-		}
-	}
+//	public void updateClasse(Class projeto, Pacote pacote, String nameClass, Boolean main, String typeClasse) {
+//		if (projeto != null && pacote != null) {
+//
+//			EntityManager em = Conn.getEntityManager();
+//			em.getTransaction().begin();
+//
+//			Class searchProjeto = em.find(Class.class, projeto.getId());
+//			// if (update.equals("Pacote")) {
+//			Pacote searchPacote = null;
+//
+//			for (Pacote listPacote : searchProjeto.getListPacote()) {
+//				if (listPacote.getNome().equals(pacote.getNome())) {
+//					searchPacote = listPacote;
+//					break;
+//				}
+//			}
+//
+//			searchPacote.addClass(nameClass, main, typeClasse);
+//
+//			em.getTransaction().commit();
+//			em.close();
+//
+//		} else {
+//			// MessageAlert.mensagemErro(StringUtility.projectNull);
+//		}
+//	}
 
 	private void addProjeto() {
 
@@ -227,18 +224,6 @@ public class DaoDBProjeto {
 
 
 
-	public void editClass(Classe classe) {
-		EntityManager em = Conn.getEntityManager();
-		em.getTransaction().begin();
-
-		Classe classeSearch = em.find(Classe.class, classe.getId());
-
-		classeSearch.setNome(classe.getNome());
-		classeSearch.setCodigo(classe.getCodigo());
-
-		em.getTransaction().commit();
-		em.close();
-	}
 
 	public void removeProject(String idProject) {
 		EntityManager em = Conn.getEntityManager();
