@@ -1,4 +1,4 @@
-package br.edu.ifsc.canoinhas.server.modelDao;
+package br.edu.ifsc.canoinhas.server.dao;
 
 import java.util.ArrayList;
 import java.util.List;

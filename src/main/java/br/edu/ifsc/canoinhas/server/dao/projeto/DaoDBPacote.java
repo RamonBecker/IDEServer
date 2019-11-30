@@ -1,4 +1,4 @@
-package br.edu.ifsc.canoinhas.server.modelDao.projeto;
+package br.edu.ifsc.canoinhas.server.dao.projeto;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -10,12 +10,12 @@ import javax.persistence.EntityManager;
 import org.hibernate.Hibernate;
 import org.jboss.logging.Message;
 
+import br.edu.ifsc.canoinhas.server.dao.Conn;
 import br.edu.ifsc.canoinhas.server.entities.Pacote;
 import br.edu.ifsc.canoinhas.server.entities.Projeto;
-import br.edu.ifsc.canoinhas.server.modelDao.Conn;
 import br.edu.ifsc.canoinhas.server.utility.StringUtility;
 
-public class DaoPacote {
+public class DaoDBPacote {
 
 	public void addPackage(String idProjeto, String name, ObjectOutputStream out, Socket client) throws IOException {
 

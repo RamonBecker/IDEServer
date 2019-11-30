@@ -1,4 +1,4 @@
-package br.edu.ifsc.canoinhas.server.modelDao.projeto;
+package br.edu.ifsc.canoinhas.server.dao.projeto;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -9,15 +9,15 @@ import javax.persistence.EntityManager;
 
 import org.hibernate.Hibernate;
 
+import br.edu.ifsc.canoinhas.server.dao.Conn;
 import br.edu.ifsc.canoinhas.server.entities.Classe;
 import br.edu.ifsc.canoinhas.server.entities.Pacote;
 import br.edu.ifsc.canoinhas.server.entities.Projeto;
-import br.edu.ifsc.canoinhas.server.modelDao.Conn;
 import br.edu.ifsc.canoinhas.server.utility.StringUtility;
 
-public class DaoProjeto {
+public class DaoDBProjeto {
 
-	public DaoProjeto() {
+	public DaoDBProjeto() {
 	}
 
 //	public void addProjeto(String nameProject, String localProject) {

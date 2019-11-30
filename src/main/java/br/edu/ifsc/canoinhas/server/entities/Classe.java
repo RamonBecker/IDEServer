@@ -100,12 +100,12 @@ public class Classe {
 		return true;
 	}
 
-	public void setCodigoClasse(Boolean main, String typeClass) {
-		if (typeClass.equals("public") && main) {
+	public void setCodigoClasse(String typeClass, String main) {
+		if (typeClass.equals("public") && main.contentEquals("1")) {
 
 			setCodigo("public class  " + getNome() + "  {" + "\n" + StringUtility.mainClass);
 		}
-		if (typeClass.equals("private") && main) {
+		if (typeClass.equals("private") && main.contentEquals("1")) {
 
 			setCodigo("private class" + getNome() + "   {" + "\n" + StringUtility.mainClass);
 		}
