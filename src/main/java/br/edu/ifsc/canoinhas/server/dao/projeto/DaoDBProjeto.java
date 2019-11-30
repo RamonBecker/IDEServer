@@ -100,7 +100,7 @@ public class DaoDBProjeto {
 
 				for (Pacote pacote : projeto.getListPacote()) {
 					if (pacote != null) {
-						mensagem = mensagem.concat(pacote.getId() + "," + pacote.getNome()+",");
+						mensagem = mensagem.concat(pacote.getId() + "," + pacote.getNome() + ",");
 
 						for (Classe classe : pacote.getListClasse()) {
 							mensagem = mensagem.concat(classe.getId() + "/" + classe.getNome() + ",");
@@ -191,16 +191,38 @@ public class DaoDBProjeto {
 
 	}
 
-	public void editProject(Projeto projeto) {
+	public void editProject(String idProject, String newName, ObjectOutputStream out, Socket client) throws IOException {
+
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+		System.out.println("Realizando consulta no Banco de Dados");
+
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+
 		EntityManager em = Conn.getEntityManager();
 
 		em.getTransaction().begin();
 
-		Projeto projetoSearch = em.find(Projeto.class, projeto.getId());
-		projetoSearch.setNome(projeto.getNome());
+		Projeto projetoSearch = em.find(Projeto.class, Integer.parseInt(idProject));
+		projetoSearch.setNome(newName);
 
 		em.getTransaction().commit();
 		em.close();
+
+		String mensagem = "404";
+		
+		if (projetoSearch != null) {
+			mensagem = "Ok";
+
+		} 
+		System.out.println("------------------------------------------------------");
+		System.out.println("Enviando pacote de dados de confirmação para cliente: "
+				+ client.getInetAddress().getHostAddress() + "  Host Name: " + client.getInetAddress().getHostName());
+		System.out.println("------------------------------------------------------");
+		out.writeUTF(mensagem);
+		System.out.println("Pacote de dados enviado para cliente: " + mensagem);
+
 	}
 
 	public void editPacote(Pacote pacote) {
@@ -228,12 +250,12 @@ public class DaoDBProjeto {
 		em.close();
 	}
 
-	public void removeProject(Projeto projeto) {
+	public void removeProject(String idProject) {
 		EntityManager em = Conn.getEntityManager();
 
 		em.getTransaction().begin();
 
-		Projeto projetoSearch = em.find(Projeto.class, projeto.getId());
+		Projeto projetoSearch = em.find(Projeto.class, Integer.parseInt(idProject));
 
 		em.remove(projetoSearch);
 

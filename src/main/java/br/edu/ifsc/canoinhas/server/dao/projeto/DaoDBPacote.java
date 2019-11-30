@@ -1,8 +1,10 @@
 package br.edu.ifsc.canoinhas.server.dao.projeto;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -14,6 +16,7 @@ import br.edu.ifsc.canoinhas.server.dao.Conn;
 import br.edu.ifsc.canoinhas.server.entities.Pacote;
 import br.edu.ifsc.canoinhas.server.entities.Projeto;
 import br.edu.ifsc.canoinhas.server.utility.StringUtility;
+import br.edu.ifsc.canoinhas.utility.MessageAlert;
 
 public class DaoDBPacote {
 
@@ -41,5 +44,29 @@ public class DaoDBPacote {
 		out.writeUTF("Ok");
 		System.out.println("Enviado resposta para cliente, que o pacote foi criado com sucesso !");
 	}
+	
+	public void submitIdProjectServer(String idProject, String newName, String operation)
+			throws UnknownHostException, IOException {
+
+		Socket server = new Socket(ipServer, portServer);
+
+		ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
+		out.writeUTF("projeto;" + operation + ";" + idProject + ";" + newName);
+		out.flush();
+
+		ObjectInputStream in = new ObjectInputStream(server.getInputStream());
+		String msg = in.readUTF();
+		 
+		if(msg.contains("Ok")) {
+			MessageAlert.mensagemRealizadoSucesso(StringUtility.completeOperation);
+		}else {
+			MessageAlert.mensagemErro(StringUtility.erro);
+		}
+		 
+		in.close();
+		out.close();
+		server.close();
+	}
+	
 
 }

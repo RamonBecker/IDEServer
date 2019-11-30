@@ -91,6 +91,13 @@ public class Main {
 				daoProjeto.getAllProjetoSubmitClient(out, client);
 			}
 
+			if (recebido[1].contentEquals("edit")) {
+				daoProjeto.editProject(recebido[2], recebido[3], out, client);
+			}
+
+			if (recebido[1].contentEquals("remove")) {
+
+			}
 		}
 
 		if (recebido[0].contentEquals("pacote")) {
@@ -106,7 +113,7 @@ public class Main {
 			DaoDBClasse daoDbClasse = new DaoDBClasse();
 
 			if (recebido[1].contentEquals("add")) {
-				daoDbClasse.addClass(recebido[2], recebido[3], recebido[4],recebido[5], out, client);
+				daoDbClasse.addClass(recebido[2], recebido[3], recebido[4], recebido[5], out, client);
 			}
 
 		}
