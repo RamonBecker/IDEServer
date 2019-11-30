@@ -82,16 +82,15 @@ public class DaoDBProjeto {
 	public void getAllProjetoSubmitClient(ObjectOutputStream out, Socket client) throws IOException {
 
 		String mensagem = "";
-		
-		
+
 		System.out.println("------------------------------------------------------");
 		System.out.println("------------------------------------------------------");
 		System.out.println("Realizando consulta no Banco de Dados");
-		
+
 		System.out.println("------------------------------------------------------");
 		System.out.println("------------------------------------------------------");
 		List<Projeto> listProjeto = getAllProjeto();
-		
+
 		if (listProjeto == null) {
 			out.writeUTF(StringUtility.erro);
 		} else {
@@ -101,7 +100,11 @@ public class DaoDBProjeto {
 
 				for (Pacote pacote : projeto.getListPacote()) {
 					if (pacote != null) {
-						mensagem = mensagem.concat(pacote.getId() + "," + pacote.getNome() + ",");
+						mensagem = mensagem.concat(pacote.getId() + "," + pacote.getNome()+",");
+
+						for (Classe classe : pacote.getListClasse()) {
+							mensagem = mensagem.concat(classe.getId() + "/" + classe.getNome() + ",");
+						}
 					}
 				}
 
