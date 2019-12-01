@@ -3,10 +3,12 @@ package br.edu.ifsc.canoinhas.server.dao.projeto;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+
 import javax.persistence.EntityManager;
+
 import br.edu.ifsc.canoinhas.server.dao.Conn;
 import br.edu.ifsc.canoinhas.server.entities.Pacote;
-import br.edu.ifsc.canoinhas.server.entities.Class;
+import br.edu.ifsc.canoinhas.server.entities.Projeto;
 
 public class DaoDBPacote {
 
@@ -22,7 +24,7 @@ public class DaoDBPacote {
 		EntityManager em = Conn.getEntityManager();
 		em.getTransaction().begin();
 
-		Class searchProjeto = em.find(Class.class, Integer.parseInt(idProjeto));
+		Projeto searchProjeto = em.find(Projeto.class, Integer.parseInt(idProjeto));
 		searchProjeto.getListPacote().add(pacote);
 		em.getTransaction().commit();
 		em.close();
@@ -34,8 +36,7 @@ public class DaoDBPacote {
 		out.writeUTF("Ok");
 		System.out.println("Enviado resposta para cliente, que o pacote foi criado com sucesso !");
 	}
-	
-	
+
 	public void editProject(String idPacote, String newName, ObjectOutputStream out, Socket client) throws IOException {
 
 		System.out.println("------------------------------------------------------");
@@ -56,6 +57,43 @@ public class DaoDBPacote {
 		em.close();
 
 		String mensagem = "404";
+
+		if (pacoteSearch != null) {
+			mensagem = "Ok";
+
+		}
+		System.out.println("------------------------------------------------------");
+		System.out.println("Enviando pacote de dados de confirmação para cliente: "
+				+ client.getInetAddress().getHostAddress() + "  Host Name: " + client.getInetAddress().getHostName());
+		System.out.println("------------------------------------------------------");
+		out.writeUTF(mensagem);
+		System.out.println("Pacote de dados enviado para cliente: " + mensagem);
+
+	}
+
+	public void removerPacote(String idPacote, ObjectOutputStream out, Socket client) throws IOException {
+
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+		System.out.println("Realizando consulta no Banco de Dados");
+
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+		System.out.println("Removendo pacote no Banco de Dados");
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+
+		EntityManager em = Conn.getEntityManager();
+		em.getTransaction().begin();
+
+		Pacote pacoteSearch = em.find(Pacote.class, Integer.parseInt(idPacote));
+
+		em.remove(pacoteSearch);
+
+		em.getTransaction().commit();
+		em.close();
+		
+		String mensagem = "404";
 		
 		if (pacoteSearch != null) {
 			mensagem = "Ok";
@@ -64,7 +102,9 @@ public class DaoDBPacote {
 		System.out.println("------------------------------------------------------");
 		System.out.println("Enviando pacote de dados de confirmação para cliente: "
 				+ client.getInetAddress().getHostAddress() + "  Host Name: " + client.getInetAddress().getHostName());
+		
 		System.out.println("------------------------------------------------------");
+		
 		out.writeUTF(mensagem);
 		System.out.println("Pacote de dados enviado para cliente: " + mensagem);
 

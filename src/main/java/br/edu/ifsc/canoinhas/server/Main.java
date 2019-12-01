@@ -96,7 +96,7 @@ public class Main {
 			}
 
 			if (recebido[1].contentEquals("remove")) {
-
+				daoProjeto.removeProject(recebido[2], out, client);
 			}
 		}
 
@@ -110,6 +110,10 @@ public class Main {
 
 			if (recebido[1].contentEquals("edit")) {
 				daoPacote.editProject(recebido[2], recebido[3], out, client);
+			}
+
+			if (recebido[1].contentEquals("remove")) {
+				daoPacote.removerPacote(recebido[2], out, client);
 			}
 		}
 

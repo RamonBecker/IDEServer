@@ -121,33 +121,6 @@ public class DaoDBProjeto {
 
 	}
 
-//	public void updateClasse(Class projeto, Pacote pacote, String nameClass, Boolean main, String typeClasse) {
-//		if (projeto != null && pacote != null) {
-//
-//			EntityManager em = Conn.getEntityManager();
-//			em.getTransaction().begin();
-//
-//			Class searchProjeto = em.find(Class.class, projeto.getId());
-//			// if (update.equals("Pacote")) {
-//			Pacote searchPacote = null;
-//
-//			for (Pacote listPacote : searchProjeto.getListPacote()) {
-//				if (listPacote.getNome().equals(pacote.getNome())) {
-//					searchPacote = listPacote;
-//					break;
-//				}
-//			}
-//
-//			searchPacote.addClass(nameClass, main, typeClasse);
-//
-//			em.getTransaction().commit();
-//			em.close();
-//
-//		} else {
-//			// MessageAlert.mensagemErro(StringUtility.projectNull);
-//		}
-//	}
-
 	private void addProjeto() {
 
 //		Projeto projeto = new Projeto("Meu projeto de teste", "loca/projeto");
@@ -188,7 +161,8 @@ public class DaoDBProjeto {
 
 	}
 
-	public void editProject(String idProject, String newName, ObjectOutputStream out, Socket client) throws IOException {
+	public void editProject(String idProject, String newName, ObjectOutputStream out, Socket client)
+			throws IOException {
 
 		System.out.println("------------------------------------------------------");
 		System.out.println("------------------------------------------------------");
@@ -208,11 +182,11 @@ public class DaoDBProjeto {
 		em.close();
 
 		String mensagem = "404";
-		
+
 		if (projetoSearch != null) {
 			mensagem = "Ok";
 
-		} 
+		}
 		System.out.println("------------------------------------------------------");
 		System.out.println("Enviando pacote de dados de confirmação para cliente: "
 				+ client.getInetAddress().getHostAddress() + "  Host Name: " + client.getInetAddress().getHostName());
@@ -222,10 +196,15 @@ public class DaoDBProjeto {
 
 	}
 
+	public void removeProject(String idProject, ObjectOutputStream out, Socket client) throws IOException {
 
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+		System.out.println("Realizando consulta no Banco de Dados");
 
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
 
-	public void removeProject(String idProject) {
 		EntityManager em = Conn.getEntityManager();
 
 		em.getTransaction().begin();
@@ -236,19 +215,22 @@ public class DaoDBProjeto {
 
 		em.getTransaction().commit();
 		em.close();
+
+		String mensagem = "404";
+
+		if (projetoSearch != null) {
+			mensagem = "Ok";
+
+		}
+		System.out.println("------------------------------------------------------");
+		System.out.println("Enviando pacote de dados de confirmação para cliente: "
+				+ client.getInetAddress().getHostAddress() + "  Host Name: " + client.getInetAddress().getHostName());
+		System.out.println("------------------------------------------------------");
+		out.writeUTF(mensagem);
+		System.out.println("Pacote de dados enviado para cliente: " + mensagem);
 	}
 
-	public void removePacote(Pacote pacote) {
-		EntityManager em = Conn.getEntityManager();
-		em.getTransaction().begin();
-
-		Pacote pacoteSearch = em.find(Pacote.class, pacote.getId());
-
-		em.remove(pacoteSearch);
-
-		em.getTransaction().commit();
-		em.close();
-	}
+	
 
 	public void removeClass(Classe classe) {
 		EntityManager em = Conn.getEntityManager();
