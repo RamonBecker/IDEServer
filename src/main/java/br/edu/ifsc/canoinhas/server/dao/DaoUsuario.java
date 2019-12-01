@@ -213,6 +213,78 @@ public class DaoUsuario {
 
 	}
 
+	public void removeUsuario(String idUsuario, ObjectOutputStream out, Socket client) throws IOException {
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+		System.out.println("Realizando consulta no Banco de Dados");
+
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+		System.out.println("Removendo usuário do Banco de Dados");
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+
+		EntityManager em = Conn.getEntityManager();
+
+		em.getTransaction().begin();
+
+		Usuario usuarioSearch = em.find(Usuario.class, Integer.parseInt(idUsuario));
+		em.remove(usuarioSearch);
+		em.getTransaction().commit();
+		em.close();
+
+		String mensagem = "404";
+
+		if (usuarioSearch != null) {
+			mensagem = "Ok";
+
+		}
+		System.out.println("------------------------------------------------------");
+		System.out.println("Enviando pacote de dados de confirmação para cliente: "
+				+ client.getInetAddress().getHostAddress() + "  Host Name: " + client.getInetAddress().getHostName());
+		System.out.println("------------------------------------------------------");
+		out.writeUTF(mensagem);
+		System.out.println("Pacote de dados enviado para cliente: " + mensagem);
+	}
+
+	public void editPasswordUsuario(String idUsuario, String nome, String newSenha, ObjectOutputStream out,
+			Socket client) throws IOException {
+
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+		System.out.println("Realizando consulta no Banco de Dados");
+
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+		System.out.println("Alterando senha do usuário  no Banco de Dados");
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+
+		EntityManager em = Conn.getEntityManager();
+
+		em.getTransaction().begin();
+
+		Usuario usuarioSearch = em.find(Usuario.class, Integer.parseInt(idUsuario));
+		usuarioSearch.setName(nome);
+		usuarioSearch.setPassword(newSenha);
+		em.getTransaction().commit();
+		em.close();
+
+		String mensagem = "404";
+
+		if (usuarioSearch != null) {
+			mensagem = "Ok";
+
+		}
+		System.out.println("------------------------------------------------------");
+		System.out.println("Enviando pacote de dados de confirmação para cliente: "
+				+ client.getInetAddress().getHostAddress() + "  Host Name: " + client.getInetAddress().getHostName());
+		System.out.println("------------------------------------------------------");
+		out.writeUTF(mensagem);
+		System.out.println("Pacote de dados enviado para cliente: " + mensagem);
+
+	}
+
 	public List<Usuario> getListUsuario() {
 		return listUsuario;
 	}

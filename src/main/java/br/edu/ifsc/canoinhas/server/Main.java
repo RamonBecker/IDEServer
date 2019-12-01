@@ -136,6 +136,7 @@ public class Main {
 		}
 
 		if (recebido[0].contentEquals("usuario")) {
+
 			DaoUsuario daoUsuario = new DaoUsuario();
 			if (recebido[1].contentEquals("getAll")) {
 				daoUsuario.getAllProjetoSubmitClient(out, client);
@@ -148,6 +149,13 @@ public class Main {
 				daoUsuario.editNameUsuario(recebido[2], recebido[3], recebido[4], out, client);
 			}
 
+			if (recebido[1].contentEquals("editSenha")) {
+				daoUsuario.editPasswordUsuario(recebido[2], recebido[3], recebido[4], out, client);
+			}
+
+			if (recebido[1].contentEquals("remove")) {
+				daoUsuario.removeUsuario(recebido[2], out, client);
+			}
 		}
 
 		out.flush();
