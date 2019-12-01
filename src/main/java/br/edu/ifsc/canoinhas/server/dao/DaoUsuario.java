@@ -87,7 +87,7 @@ public class DaoUsuario {
 			out.writeUTF("404");
 		} else {
 			for (Usuario usuario : listUsuario) {
-				mensagem = mensagem.concat(usuario.getName() + ";" + usuario.getPassword() + ";");
+				mensagem = mensagem.concat(usuario.getId() + ";" + usuario.getName() + ";" + usuario.getPassword() + ";");
 			}
 			out.writeUTF(mensagem);
 		}
