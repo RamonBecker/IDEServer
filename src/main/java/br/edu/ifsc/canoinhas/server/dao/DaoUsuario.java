@@ -87,7 +87,8 @@ public class DaoUsuario {
 			out.writeUTF("404");
 		} else {
 			for (Usuario usuario : listUsuario) {
-				mensagem = mensagem.concat(usuario.getId() + ";" + usuario.getName() + ";" + usuario.getPassword() + ";");
+				mensagem = mensagem
+						.concat(usuario.getId() + ";" + usuario.getName() + ";" + usuario.getPassword() + ";");
 			}
 			out.writeUTF(mensagem);
 		}
@@ -172,6 +173,44 @@ public class DaoUsuario {
 			}
 		}
 		return false;
+	}
+
+	public void editNameUsuario(String idUsuario, String newName, String senha, ObjectOutputStream out, Socket client)
+			throws IOException {
+
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+		System.out.println("Realizando consulta no Banco de Dados");
+
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+		System.out.println("Alterando nome do usuário  no Banco de Dados");
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+
+		EntityManager em = Conn.getEntityManager();
+
+		em.getTransaction().begin();
+
+		Usuario usuarioSearch = em.find(Usuario.class, Integer.parseInt(idUsuario));
+		usuarioSearch.setName(newName);
+		usuarioSearch.setPassword(senha);
+		em.getTransaction().commit();
+		em.close();
+
+		String mensagem = "404";
+
+		if (usuarioSearch != null) {
+			mensagem = "Ok";
+
+		}
+		System.out.println("------------------------------------------------------");
+		System.out.println("Enviando pacote de dados de confirmação para cliente: "
+				+ client.getInetAddress().getHostAddress() + "  Host Name: " + client.getInetAddress().getHostName());
+		System.out.println("------------------------------------------------------");
+		out.writeUTF(mensagem);
+		System.out.println("Pacote de dados enviado para cliente: " + mensagem);
+
 	}
 
 	public List<Usuario> getListUsuario() {

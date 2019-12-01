@@ -143,6 +143,11 @@ public class Main {
 			if (recebido[1].contentEquals("add")) {
 				daoUsuario.addUsuarioBD(recebido[2], recebido[3], out, client);
 			}
+
+			if (recebido[1].contentEquals("editName")) {
+				daoUsuario.editNameUsuario(recebido[2], recebido[3], recebido[4], out, client);
+			}
+
 		}
 
 		out.flush();
