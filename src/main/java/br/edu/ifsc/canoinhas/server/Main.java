@@ -12,9 +12,11 @@ import java.net.UnknownHostException;
 import java.util.Enumeration;
 
 import br.edu.ifsc.canoinhas.server.dao.Conn;
+import br.edu.ifsc.canoinhas.server.dao.DaoUsuario;
 import br.edu.ifsc.canoinhas.server.dao.projeto.DaoDBClasse;
 import br.edu.ifsc.canoinhas.server.dao.projeto.DaoDBPacote;
 import br.edu.ifsc.canoinhas.server.dao.projeto.DaoDBProjeto;
+import br.edu.ifsc.canoinhas.server.entities.Usuario;
 import br.edu.ifsc.canoinhas.server.exceptions.CommException;
 import br.edu.ifsc.canoinhas.server.exceptions.NetDeviceException;
 import br.edu.ifsc.canoinhas.server.exceptions.PortException;
@@ -83,7 +85,7 @@ public class Main {
 
 			if (recebido[1].contentEquals("add")) {
 
-				daoProjeto.addProjectBD(recebido[2], recebido[3], out);
+				daoProjeto.addProjectBD(recebido[2], recebido[3], out, client);
 
 			}
 
@@ -128,60 +130,25 @@ public class Main {
 				daoDbClasse.editClass(recebido[2], recebido[3], out, client);
 			}
 
+			if (recebido[1].contentEquals("remove")) {
+				daoDbClasse.removerClasse(recebido[3], out, client);
+			}
 		}
 
-//		if (recebido[0].contentEquals("user")) {
-//			if (recebido[1].contentEquals("get"))
-//				getUser(out, recebido);
-//			else if (recebido[1].contentEquals("getAll"))
-//				getAllUser(out);
-//			else if (recebido[1].contentEquals("add"))
-//				addUser(out, recebido);
-//			else if (recebido[1].contentEquals("delete"))
-//				deleteUser(out, recebido);
-//			else if (recebido[1].contentEquals("update"))
-//				updateUser(out, recebido);
-//		}
+		if (recebido[0].contentEquals("usuario")) {
+			DaoUsuario daoUsuario = new DaoUsuario();
+			if (recebido[1].contentEquals("getAll")) {
+				daoUsuario.getAllProjetoSubmitClient(out, client);
+			}
+			if (recebido[1].contentEquals("add")) {
+				daoUsuario.addUsuarioBD(recebido[2], recebido[3], out, client);
+			}
+		}
 
 		out.flush();
 		in.close();
 		out.close();
 
-	}
-
-	private static void updateUser(ObjectOutputStream out, String[] recebido) throws IOException {
-//		User user = new User(recebido[2], Integer.valueOf(recebido[3]));
-//		new UserDAO().update(user);
-
-	}
-
-	private static void deleteUser(ObjectOutputStream out, String[] recebido) throws IOException {
-//		User user = new User(recebido[2], Integer.valueOf(recebido[3]));
-//		new UserDAO().delete(user);
-	}
-
-	private static void addUser(ObjectOutputStream out, String[] recebido) throws IOException {
-//		User user = new User(recebido[2], Integer.valueOf(recebido[3]));
-//		new UserDAO().add(user);
-	}
-
-	private static void getAllUser(ObjectOutputStream out) throws IOException {
-//		String msg = "";
-//		List<User> users = new UserDAO().getAll();
-//		if (users == null)
-//			out.writeUTF("404");
-//		else
-//			for (User user : users)
-//				msg = msg.concat(user.getName() + ";" + user.getAge() + ";" + user.getRegisterDate() + ";");
-//		out.writeUTF(msg);
-	}
-
-	private static void getUser(ObjectOutputStream out, String[] recebido) throws IOException {
-//		User user = new UserDAO().get(recebido[2]);
-//		if (user == null) {
-//			out.writeUTF("404");
-//		} else {
-//			out.writeUTF(user.getName() + ";" + user.getAge() + ";" + user.getRegisterDate());
 	}
 
 	private static ServerSocket openSocket() throws PortException {

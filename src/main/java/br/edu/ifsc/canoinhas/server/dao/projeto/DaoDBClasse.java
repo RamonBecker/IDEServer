@@ -76,4 +76,43 @@ public class DaoDBClasse {
 		System.out.println("Pacote de dados enviado para cliente: " + mensagem);
 
 	}
+	
+	public void removerClasse(String idClasse, ObjectOutputStream out, Socket client) throws IOException {
+
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+		System.out.println("Realizando consulta no Banco de Dados");
+
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+		System.out.println("Removendo classe no Banco de Dados");
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+
+		EntityManager em = Conn.getEntityManager();
+		em.getTransaction().begin();
+
+		Classe classeSearch = em.find(Classe.class, Integer.parseInt(idClasse));
+
+		em.remove(classeSearch);
+
+		em.getTransaction().commit();
+		em.close();
+		
+		String mensagem = "404";
+		
+		if (classeSearch != null) {
+			mensagem = "Ok";
+
+		} 
+		System.out.println("------------------------------------------------------");
+		System.out.println("Enviando pacote de dados de confirmação para cliente: "
+				+ client.getInetAddress().getHostAddress() + "  Host Name: " + client.getInetAddress().getHostName());
+		
+		System.out.println("------------------------------------------------------");
+		
+		out.writeUTF(mensagem);
+		System.out.println("Pacote de dados enviado para cliente: " + mensagem);
+
+	}
 }

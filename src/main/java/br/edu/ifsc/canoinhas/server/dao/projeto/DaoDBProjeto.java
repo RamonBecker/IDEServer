@@ -17,35 +17,19 @@ public class DaoDBProjeto {
 	public DaoDBProjeto() {
 	}
 
-//	public void addProjeto(String nameProject, String localProject) {
-//
-//		EntityManager em = Conn.getEntityManager();
-//
-//		try {
-//
-//			Projeto projetoNew = new Projeto(nameProject, localProject);
-//
-//			if (checkProjeto(nameProject.trim(), localProject.trim())) {
-//				// MessageAlert.mensagemErro(StringUtility.projetoIguais);
-//				return;
-//			}
-//
-//			addProjectBD(projetoNew);
-//			// MessageAlert.mensagemRealizadoSucesso(StringUtility.projectCreate);
-//
-//		} catch (IllegalArgumentException e) {
-//			// MessageAlert.mensagemErro(e.getMessage());
-//		} finally {
-//			em.close();
-//		}
-//	}
-
-	public void addProjectBD(String nome, String location, ObjectOutputStream out) throws IOException {
+	public void addProjectBD(String nome, String location, ObjectOutputStream out, Socket client) throws IOException {
 
 		EntityManager em = Conn.getEntityManager();
 
 		try {
-
+			
+			
+			System.out.println("------------------------------------------------------");
+			System.out.println("------------------------------------------------------");
+			System.out.println("Inserindo projeto no banco de dados");
+			System.out.println("------------------------------------------------------");
+			System.out.println("------------------------------------------------------");
+			
 			Projeto projeto = new Projeto(nome, location);
 
 			em.getTransaction().begin();
@@ -60,7 +44,13 @@ public class DaoDBProjeto {
 		} finally {
 			em.close();
 		}
+		
+		System.out.println("Enviando pacote de dados de projetos para cliente: "
+				+ client.getInetAddress().getHostAddress() + "  Host Name: " + client.getInetAddress().getHostName());
+		System.out.println("------------------------------------------------------");
 
+		out.writeUTF("Ok");
+		System.out.println("Enviado resposta para cliente, que o projeto foi criado com sucesso !");
 	}
 
 	public List<Projeto> getAllProjeto() {
@@ -87,6 +77,8 @@ public class DaoDBProjeto {
 		System.out.println("------------------------------------------------------");
 		System.out.println("------------------------------------------------------");
 		List<Projeto> listProjeto = getAllProjeto();
+		
+		System.out.println(listProjeto);
 
 		if (listProjeto == null) {
 			out.writeUTF(StringUtility.erro);
@@ -202,6 +194,10 @@ public class DaoDBProjeto {
 		System.out.println("------------------------------------------------------");
 		System.out.println("Realizando consulta no Banco de Dados");
 
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+		
+		System.out.println("Removendo classe no Banco de Dados");
 		System.out.println("------------------------------------------------------");
 		System.out.println("------------------------------------------------------");
 

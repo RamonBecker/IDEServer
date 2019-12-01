@@ -1,9 +1,16 @@
 package br.edu.ifsc.canoinhas.server.dao;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.List;
 import javax.persistence.EntityManager;
-import br.edu.ifsc.canoinhas.server.entities.Usuario;
 
+import br.edu.ifsc.canoinhas.server.entities.Classe;
+import br.edu.ifsc.canoinhas.server.entities.Pacote;
+import br.edu.ifsc.canoinhas.server.entities.Projeto;
+import br.edu.ifsc.canoinhas.server.entities.Usuario;
+import br.edu.ifsc.canoinhas.server.utility.StringUtility;
 
 public class DaoUsuario {
 
@@ -20,10 +27,77 @@ public class DaoUsuario {
 		return controllerDBUsuario;
 	}
 
-	public void loadUserBD() {
+	public List<Usuario> getAllUser() {
 		EntityManager em = Conn.getEntityManager();
-		listUsuario = em.createQuery("FROM Usuario", Usuario.class).getResultList();
+		List<Usuario> listUsuario = em.createQuery("FROM Usuario", Usuario.class).getResultList();
 		em.close();
+
+		return listUsuario;
+	}
+
+	public void addUsuarioBD(String nome, String senha, ObjectOutputStream out, Socket client) throws IOException {
+
+		EntityManager em = Conn.getEntityManager();
+
+		try {
+			System.out.println("------------------------------------------------------");
+			System.out.println("------------------------------------------------------");
+			System.out.println("Inserindo usuario no banco de dados");
+			System.out.println("------------------------------------------------------");
+			System.out.println("------------------------------------------------------");
+
+			Usuario usuario = new Usuario(nome, senha);
+
+			em.getTransaction().begin();
+			em.persist(usuario);
+			em.getTransaction().commit();
+
+			out.writeUTF(StringUtility.ok);
+
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+
+		} finally {
+			em.close();
+		}
+
+		System.out.println("Enviando pacote de dados de projetos para cliente: "
+				+ client.getInetAddress().getHostAddress() + "  Host Name: " + client.getInetAddress().getHostName());
+		System.out.println("------------------------------------------------------");
+
+		out.writeUTF("Ok");
+		System.out.println("Enviado resposta para cliente, que o usuario foi criado com sucesso !");
+	}
+
+	public void getAllProjetoSubmitClient(ObjectOutputStream out, Socket client) throws IOException {
+
+		String mensagem = "";
+
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+		System.out.println("Realizando consulta no Banco de Dados");
+
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+		List<Usuario> listUsuario = getAllUser();
+
+		System.out.println(listUsuario);
+
+		if (listUsuario == null) {
+			out.writeUTF("404");
+		} else {
+			for (Usuario usuario : listUsuario) {
+				mensagem = mensagem.concat(usuario.getName() + ";" + usuario.getPassword() + ";");
+			}
+			out.writeUTF(mensagem);
+		}
+
+		System.out.println("------------------------------------------------------");
+		System.out.println("Enviando pacote de dados de projetos para cliente: "
+				+ client.getInetAddress().getHostAddress() + "  Host Name: " + client.getInetAddress().getHostName());
+		System.out.println("------------------------------------------------------");
+		System.out.println("Pacote de dados enviado para cliente: " + mensagem);
+
 	}
 
 	public void addUsuario(Usuario usuario) {
@@ -32,15 +106,15 @@ public class DaoUsuario {
 		em.persist(usuario);
 		em.getTransaction().commit();
 		em.close();
-	//	MessageAlert.mensagemRealizadoSucesso(StringUtility.createUser);
+		// MessageAlert.mensagemRealizadoSucesso(StringUtility.createUser);
 	}
 
 	public void updateUsuario(Usuario usuario) {
 		EntityManager em = Conn.getEntityManager();
 		em.getTransaction().begin();
-		
+
 		Usuario searchUser = em.find(Usuario.class, usuario.getId());
-		
+
 		searchUser.setName(usuario.getName());
 		searchUser.setPassword(usuario.getPassword());
 		em.getTransaction().commit();
@@ -48,7 +122,7 @@ public class DaoUsuario {
 	}
 
 	public void alterNameUsuario(String newName, String oldName, String password) {
-		loadUserBD();
+		// loadUserBD();
 
 		Usuario user = null;
 
@@ -62,14 +136,14 @@ public class DaoUsuario {
 		if (user != null) {
 			user.setName(newName);
 			updateUsuario(user);
-		//	MessageAlert.mensagemRealizadoSucesso(StringUtility.alterUser);
+			// MessageAlert.mensagemRealizadoSucesso(StringUtility.alterUser);
 		} else {
-		//	MessageAlert.mensagemErro(StringUtility.loginIncorret);
+			// MessageAlert.mensagemErro(StringUtility.loginIncorret);
 		}
 	}
 
 	public void alterPassword(String nameUser, String oldPassword, String newPassword) {
-		loadUserBD();
+		// loadUserBD();
 		Usuario user = null;
 
 		for (Usuario usuario : listUsuario) {
@@ -82,15 +156,15 @@ public class DaoUsuario {
 		if (user != null) {
 			user.setPassword(newPassword);
 			updateUsuario(user);
-			//MessageAlert.mensagemRealizadoSucesso(StringUtility.alterPass);
+			// MessageAlert.mensagemRealizadoSucesso(StringUtility.alterPass);
 		} else {
-			//MessageAlert.mensagemErro(StringUtility.loginIncorret);
+			// MessageAlert.mensagemErro(StringUtility.loginIncorret);
 		}
 	}
 
 	public boolean login(String nameUser, String passwordUser) {
-		
-		loadUserBD();
+
+		// loadUserBD();
 
 		for (Usuario usuario : listUsuario) {
 			if (usuario.getName().equals(nameUser) && usuario.getPassword().equals(passwordUser)) {
