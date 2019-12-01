@@ -10,13 +10,12 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
-
 import br.edu.ifsc.canoinhas.server.dao.Conn;
+import br.edu.ifsc.canoinhas.server.dao.DaoEmpresa;
 import br.edu.ifsc.canoinhas.server.dao.DaoUsuario;
 import br.edu.ifsc.canoinhas.server.dao.projeto.DaoDBClasse;
 import br.edu.ifsc.canoinhas.server.dao.projeto.DaoDBPacote;
 import br.edu.ifsc.canoinhas.server.dao.projeto.DaoDBProjeto;
-import br.edu.ifsc.canoinhas.server.entities.Usuario;
 import br.edu.ifsc.canoinhas.server.exceptions.CommException;
 import br.edu.ifsc.canoinhas.server.exceptions.NetDeviceException;
 import br.edu.ifsc.canoinhas.server.exceptions.PortException;
@@ -63,6 +62,7 @@ public class Main {
 	}
 
 	private static void process(Socket client) throws IOException {
+
 		System.out.println("------------------------------------------------------");
 
 		System.out.println("Cliente conectado: " + client.getInetAddress().getHostAddress());
@@ -72,9 +72,21 @@ public class Main {
 		String msg = in.readUTF();
 		System.out.println("Cliente enviou: " + msg);
 
+		if (msg.contains("classe")) {
+			System.out.println("Entra aqui");
+		}
+
 		ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
 
-		String recebido[] = msg.split(";");
+		String recebido[] = null;
+		if (msg.contains("-")) {
+			System.out.println("Entrou aqui deu certo o bagulho");
+			recebido = msg.split("-");
+		} else {
+
+			recebido = msg.split(";");
+
+		}
 
 		for (String string : recebido) {
 			System.out.println(string);
@@ -133,13 +145,17 @@ public class Main {
 			if (recebido[1].contentEquals("remove")) {
 				daoDbClasse.removerClasse(recebido[3], out, client);
 			}
+
+			if (recebido[1].contentEquals("editCodigo")) {
+				daoDbClasse.editCodigoClass(recebido[2], recebido[3], out, client);
+			}
 		}
 
 		if (recebido[0].contentEquals("usuario")) {
 
 			DaoUsuario daoUsuario = new DaoUsuario();
 			if (recebido[1].contentEquals("getAll")) {
-				daoUsuario.getAllProjetoSubmitClient(out, client);
+				daoUsuario.getAllUsuarioSubmitClient(out, client);
 			}
 			if (recebido[1].contentEquals("add")) {
 				daoUsuario.addUsuarioBD(recebido[2], recebido[3], out, client);
@@ -155,6 +171,19 @@ public class Main {
 
 			if (recebido[1].contentEquals("remove")) {
 				daoUsuario.removeUsuario(recebido[2], out, client);
+			}
+		}
+
+		if (recebido[0].contentEquals("empresa")) {
+			DaoEmpresa daoEmpresa = new DaoEmpresa();
+
+			if (recebido[1].contentEquals("getAll")) {
+				daoEmpresa.getAllEmpresaSubmitClient(out, client);
+			}
+
+			if (recebido[1].contentEquals("add")) {
+				daoEmpresa.addEmpresa(recebido[2], recebido[3], recebido[4], recebido[5], recebido[6], recebido[7],
+						recebido[8], recebido[9], recebido[10], out, client);
 			}
 		}
 

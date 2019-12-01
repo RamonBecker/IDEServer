@@ -15,6 +15,7 @@ import br.edu.ifsc.canoinhas.server.utility.StringUtility;
 public class DaoDBProjeto {
 
 	public DaoDBProjeto() {
+		 addFirstProjeto();
 	}
 
 	public void addProjectBD(String nome, String location, ObjectOutputStream out, Socket client) throws IOException {
@@ -22,14 +23,13 @@ public class DaoDBProjeto {
 		EntityManager em = Conn.getEntityManager();
 
 		try {
-			
-			
+
 			System.out.println("------------------------------------------------------");
 			System.out.println("------------------------------------------------------");
 			System.out.println("Inserindo projeto no banco de dados");
 			System.out.println("------------------------------------------------------");
 			System.out.println("------------------------------------------------------");
-			
+
 			Projeto projeto = new Projeto(nome, location);
 
 			em.getTransaction().begin();
@@ -44,7 +44,7 @@ public class DaoDBProjeto {
 		} finally {
 			em.close();
 		}
-		
+
 		System.out.println("Enviando pacote de dados de projetos para cliente: "
 				+ client.getInetAddress().getHostAddress() + "  Host Name: " + client.getInetAddress().getHostName());
 		System.out.println("------------------------------------------------------");
@@ -77,7 +77,7 @@ public class DaoDBProjeto {
 		System.out.println("------------------------------------------------------");
 		System.out.println("------------------------------------------------------");
 		List<Projeto> listProjeto = getAllProjeto();
-		
+
 		System.out.println(listProjeto);
 
 		if (listProjeto == null) {
@@ -92,7 +92,8 @@ public class DaoDBProjeto {
 						mensagem = mensagem.concat(pacote.getId() + "," + pacote.getNome() + ",");
 
 						for (Classe classe : pacote.getListClasse()) {
-							mensagem = mensagem.concat(classe.getId() + "/" + classe.getNome() + ",");
+							mensagem = mensagem
+									.concat(classe.getId() + "/" + classe.getNome() + ",");
 						}
 					}
 				}
@@ -113,20 +114,20 @@ public class DaoDBProjeto {
 
 	}
 
-	private void addProjeto() {
+	public void addFirstProjeto() {
 
-//		Projeto projeto = new Projeto("Meu projeto de teste", "loca/projeto");
-//
-//		Pacote pacote = new Pacote("Meu pacote de teste");
-//
-//		Classe classeCadastroEmpresa = new Classe("CadastroEmpresa");
-//		Classe classeLogin = new Classe("Login");
-//		Classe classeBuscarEmpresa = new Classe("Buscarempresa");
-//		Classe classePrincipal = new Classe("Principal");
-//		Classe classeRedefinirSenhaUsuario = new Classe("RedefinirSenhaUsuario");
-//		Classe classeAtenderOcorrencia = new Classe("Atender Ocorrencia");
-//		Classe classeMain = new Classe("Main");
-//
+		Projeto projeto = new Projeto("Meu projeto de teste", "loca/projeto");
+
+		Pacote pacote = new Pacote("Meu pacote de teste");
+
+		Classe classeCadastroEmpresa = new Classe("CadastroEmpresa");
+		Classe classeLogin = new Classe("Login");
+		Classe classeBuscarEmpresa = new Classe("Buscarempresa");
+		Classe classePrincipal = new Classe("Principal");
+		Classe classeRedefinirSenhaUsuario = new Classe("RedefinirSenhaUsuario");
+		Classe classeAtenderOcorrencia = new Classe("Atender Ocorrencia");
+		Classe classeMain = new Classe("Main");
+
 //		classeCadastroEmpresa.setCodigo(StringUtility.cadastrarEmpresa);
 //		classeLogin.setCodigo(StringUtility.login);
 //		classeBuscarEmpresa.setCodigo(StringUtility.buscarEmpresa);
@@ -134,22 +135,26 @@ public class DaoDBProjeto {
 //		classeRedefinirSenhaUsuario.setCodigo(StringUtility.redefinirSenhaUsuario);
 //		classeAtenderOcorrencia.setCodigo(StringUtility.classeAtenderOcorrencia);
 //		classeMain.setCodigo(StringUtility.main);
-//
-//		pacote.setListClasse(new ArrayList<Classe>());
-//
-//		pacote.addClass(classeCadastroEmpresa);
-//		pacote.addClass(classeLogin);
-//		pacote.addClass(classeBuscarEmpresa);
-//		pacote.addClass(classePrincipal);
-//		pacote.addClass(classeRedefinirSenhaUsuario);
-//		pacote.addClass(classeAtenderOcorrencia);
-//		pacote.addClass(classeMain);
-//
-//		projeto.setListPacote(new ArrayList<Pacote>());
-//
-//		projeto.addPackage(pacote);
-//
-//		addProjectBD(projeto);
+
+		pacote.setListClasse(new ArrayList<Classe>());
+
+		pacote.addClass(classeCadastroEmpresa);
+		pacote.addClass(classeLogin);
+		pacote.addClass(classeBuscarEmpresa);
+		pacote.addClass(classePrincipal);
+		pacote.addClass(classeRedefinirSenhaUsuario);
+		pacote.addClass(classeAtenderOcorrencia);
+		pacote.addClass(classeMain);
+
+		projeto.setListPacote(new ArrayList<Pacote>());
+
+		projeto.addPackage(pacote);
+
+		EntityManager em = Conn.getEntityManager();
+
+		em.getTransaction().begin();
+		em.persist(projeto);
+		em.getTransaction().commit();
 
 	}
 
@@ -196,7 +201,7 @@ public class DaoDBProjeto {
 
 		System.out.println("------------------------------------------------------");
 		System.out.println("------------------------------------------------------");
-		
+
 		System.out.println("Removendo classe no Banco de Dados");
 		System.out.println("------------------------------------------------------");
 		System.out.println("------------------------------------------------------");
@@ -222,22 +227,7 @@ public class DaoDBProjeto {
 		System.out.println("Enviando pacote de dados de confirmação para cliente: "
 				+ client.getInetAddress().getHostAddress() + "  Host Name: " + client.getInetAddress().getHostName());
 		System.out.println("------------------------------------------------------");
-		out.writeUTF(mensagem);
 		System.out.println("Pacote de dados enviado para cliente: " + mensagem);
+		out.writeUTF(mensagem);
 	}
-
-	
-
-	public void removeClass(Classe classe) {
-		EntityManager em = Conn.getEntityManager();
-		em.getTransaction().begin();
-
-		Classe classeSearch = em.find(Classe.class, classe.getId());
-
-		em.remove(classeSearch);
-
-		em.getTransaction().commit();
-		em.close();
-	}
-
 }

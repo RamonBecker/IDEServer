@@ -69,7 +69,7 @@ public class DaoUsuario {
 		System.out.println("Enviado resposta para cliente, que o usuario foi criado com sucesso !");
 	}
 
-	public void getAllProjetoSubmitClient(ObjectOutputStream out, Socket client) throws IOException {
+	public void getAllUsuarioSubmitClient(ObjectOutputStream out, Socket client) throws IOException {
 
 		String mensagem = "";
 
