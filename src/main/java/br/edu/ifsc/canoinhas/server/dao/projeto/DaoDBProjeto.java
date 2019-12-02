@@ -15,7 +15,7 @@ import br.edu.ifsc.canoinhas.server.utility.StringUtility;
 public class DaoDBProjeto {
 
 	public DaoDBProjeto() {
-		// addFirstProjeto();
+		addFirstProjeto();
 	}
 
 	public void addProjectBD(String nome, String location, ObjectOutputStream out, Socket client) throws IOException {
@@ -92,8 +92,9 @@ public class DaoDBProjeto {
 						mensagem = mensagem.concat(pacote.getId() + "," + pacote.getNome() + ",");
 
 						for (Classe classe : pacote.getListClasse()) {
-							mensagem = mensagem
-									.concat(classe.getId() + "/" + classe.getNome() + ",");
+							mensagem = mensagem.concat(classe.getId() + "/" + classe.getNome() +"/"+classe.getTypeClasse()+"/" +
+							classe.getMain()+
+									",");
 						}
 					}
 				}
@@ -121,13 +122,32 @@ public class DaoDBProjeto {
 		Pacote pacote = new Pacote("Meu pacote de teste");
 
 		Classe classeCadastroEmpresa = new Classe("CadastroEmpresa");
-		Classe classeLogin = new Classe("Login");
-		Classe classeBuscarEmpresa = new Classe("Buscarempresa");
-		Classe classePrincipal = new Classe("Principal");
-		Classe classeRedefinirSenhaUsuario = new Classe("RedefinirSenhaUsuario");
-		Classe classeAtenderOcorrencia = new Classe("Atender Ocorrencia");
-		Classe classeMain = new Classe("Main");
+		classeCadastroEmpresa.setTypeClasse("public");
+		classeCadastroEmpresa.main("0");
 
+		Classe classeLogin = new Classe("Login");
+		classeLogin.setTypeClasse("public");
+		classeLogin.main("0");
+
+		Classe classeBuscarEmpresa = new Classe("Buscarempresa");
+		classeBuscarEmpresa.setTypeClasse("public");
+		classeBuscarEmpresa.main("0");
+
+		Classe classePrincipal = new Classe("Principal");
+		classePrincipal.setTypeClasse("public");
+		classePrincipal.main("0");
+
+		Classe classeRedefinirSenhaUsuario = new Classe("RedefinirSenhaUsuario");
+		classeRedefinirSenhaUsuario.setTypeClasse("public");
+		classeRedefinirSenhaUsuario.main("0");
+
+		Classe classeAtenderOcorrencia = new Classe("Atender Ocorrencia");
+		classeAtenderOcorrencia.setTypeClasse("public");
+		classeAtenderOcorrencia.main("0");
+
+		Classe classeMain = new Classe("Main");
+		classeMain.setTypeClasse("public");
+		classeMain.main("1");
 //		classeCadastroEmpresa.setCodigo(StringUtility.cadastrarEmpresa);
 //		classeLogin.setCodigo(StringUtility.login);
 //		classeBuscarEmpresa.setCodigo(StringUtility.buscarEmpresa);

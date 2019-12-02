@@ -208,6 +208,9 @@ public class Main {
 			if (recebido[1].contentEquals("getAll")) {
 				daoOcorrencia.getAllOcorrenciaSubmitClient(out, client);
 			}
+			if (recebido[1].contentEquals("edit")) {
+				daoOcorrencia.editStatusOcorrencia(recebido[2], recebido[3], out, client);
+			}
 		}
 
 		out.flush();

@@ -20,7 +20,8 @@ public class DaoDBClasse {
 		System.out.println("------------------------------------------------------");
 
 		Classe classe = new Classe(nameClass);
-
+		classe.main(main);
+		classe.setTypeClasse(typeClass);
 		classe.setCodigoClasse(typeClass, main);
 
 		EntityManager em = Conn.getEntityManager();
@@ -114,8 +115,9 @@ public class DaoDBClasse {
 
 	}
 
-	public void editCodigoClass(String idClass, String codigo, ObjectOutputStream out, Socket client) throws IOException {
-		
+	public void editCodigoClass(String idClass, String codigo, ObjectOutputStream out, Socket client)
+			throws IOException {
+
 		System.out.println("------------------------------------------------------");
 		System.out.println("------------------------------------------------------");
 		System.out.println("Realizando consulta no Banco de Dados");
@@ -143,7 +145,7 @@ public class DaoDBClasse {
 		System.out.println("Enviando pacote de dados de confirmação para cliente: "
 				+ client.getInetAddress().getHostAddress() + "  Host Name: " + client.getInetAddress().getHostName());
 		System.out.println("------------------------------------------------------");
-		//out.writeUTF(mensagem);
+		// out.writeUTF(mensagem);
 		System.out.println("Pacote de dados enviado para cliente: " + mensagem);
 	}
 }

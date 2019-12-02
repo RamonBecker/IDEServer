@@ -5,10 +5,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
 import javax.persistence.EntityManager;
-
-import br.edu.ifsc.canoinhas.server.entities.Empresa;
 import br.edu.ifsc.canoinhas.server.entities.Endereco;
 import br.edu.ifsc.canoinhas.server.entities.Ocorrencia;
+import br.edu.ifsc.canoinhas.server.entities.Pacote;
 import br.edu.ifsc.canoinhas.server.utility.StringUtility;
 
 public class DaoOcorrencia {
@@ -80,11 +79,11 @@ public class DaoOcorrencia {
 			for (Ocorrencia ocorrencia : listOcorrencia) {
 
 				mensagem = mensagem.concat("-" + ocorrencia.getId() + ";" + ocorrencia.getNomeVitima() + ";"
-						+ ocorrencia.getGravidade() + ";" + ocorrencia.getEndereco().getId() + ";"
-						+ ocorrencia.getEndereco().getRua() + ";" + ocorrencia.getEndereco().getBairro() + ";"
-						+ ocorrencia.getEndereco().getNumero() + ";" + ocorrencia.getEndereco().getTelefone() + ";"
-						+ ocorrencia.getEndereco().getComplemento() + ";" + ocorrencia.getEndereco().getCep() + ";"
-						+ ocorrencia.getEndereco().getCidade()
+						+ ocorrencia.getGravidade() + ";" + ocorrencia.getStatus() + ";"
+						+ ocorrencia.getEndereco().getId() + ";" + ocorrencia.getEndereco().getRua() + ";"
+						+ ocorrencia.getEndereco().getBairro() + ";" + ocorrencia.getEndereco().getNumero() + ";"
+						+ ocorrencia.getEndereco().getTelefone() + ";" + ocorrencia.getEndereco().getComplemento() + ";"
+						+ ocorrencia.getEndereco().getCep() + ";" + ocorrencia.getEndereco().getCidade()
 
 				);
 			}
@@ -100,14 +99,38 @@ public class DaoOcorrencia {
 
 	}
 
-	public void editOcorrencia(Ocorrencia ocorrencia) {
+	public void editStatusOcorrencia(String idOcorrencia, String status, ObjectOutputStream out, Socket client)
+			throws IOException {
+
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+		System.out.println("Realizando consulta no Banco de Dados");
+
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
 
 		EntityManager em = Conn.getEntityManager();
 		em.getTransaction().begin();
-		Ocorrencia ocorrenciaSearch = em.find(Ocorrencia.class, ocorrencia.getId());
-		ocorrenciaSearch.setStatus(ocorrencia.getStatus());
+		Ocorrencia ocorrenciaSearch = em.find(Ocorrencia.class, Integer.parseInt(idOcorrencia));
+		ocorrenciaSearch.setStatus(status);
 		em.getTransaction().commit();
 		em.close();
+		String mensagem = "404";
+
+		if (ocorrenciaSearch != null) {
+			mensagem = "Ok";
+
+		}
+		System.out.println("------------------------------------------------------");
+		System.out.println("Enviando pacote de dados de confirmação para cliente: "
+				+ client.getInetAddress().getHostAddress() + "  Host Name: " + client.getInetAddress().getHostName());
+		System.out.println("------------------------------------------------------");
+
+		System.out.println("Pacote de dados enviado para cliente: " + mensagem);
+		out.writeUTF(mensagem);
+	}
+
+	public void editOcorrencia(Ocorrencia ocorrencia) {
 
 	}
 
