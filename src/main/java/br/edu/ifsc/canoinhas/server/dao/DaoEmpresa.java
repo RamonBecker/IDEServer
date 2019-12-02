@@ -4,11 +4,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
-
 import javax.persistence.EntityManager;
-
-import org.jboss.logging.Message;
-
 import br.edu.ifsc.canoinhas.server.entities.Empresa;
 import br.edu.ifsc.canoinhas.server.entities.Endereco;
 import br.edu.ifsc.canoinhas.server.utility.StringUtility;

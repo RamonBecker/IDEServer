@@ -15,7 +15,7 @@ import br.edu.ifsc.canoinhas.server.utility.StringUtility;
 public class DaoDBProjeto {
 
 	public DaoDBProjeto() {
-		 addFirstProjeto();
+		// addFirstProjeto();
 	}
 
 	public void addProjectBD(String nome, String location, ObjectOutputStream out, Socket client) throws IOException {

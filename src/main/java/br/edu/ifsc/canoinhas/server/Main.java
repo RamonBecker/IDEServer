@@ -12,6 +12,7 @@ import java.net.UnknownHostException;
 import java.util.Enumeration;
 import br.edu.ifsc.canoinhas.server.dao.Conn;
 import br.edu.ifsc.canoinhas.server.dao.DaoEmpresa;
+import br.edu.ifsc.canoinhas.server.dao.DaoOcorrencia;
 import br.edu.ifsc.canoinhas.server.dao.DaoUsuario;
 import br.edu.ifsc.canoinhas.server.dao.projeto.DaoDBClasse;
 import br.edu.ifsc.canoinhas.server.dao.projeto.DaoDBPacote;
@@ -172,7 +173,7 @@ public class Main {
 			if (recebido[1].contentEquals("remove")) {
 				daoUsuario.removeUsuario(recebido[2], out, client);
 			}
-			
+
 		}
 
 		if (recebido[0].contentEquals("empresa")) {
@@ -190,10 +191,22 @@ public class Main {
 			if (recebido[1].contentEquals("remove")) {
 				daoEmpresa.removeEmpresa(recebido[2], out, client);
 			}
-			
-			if(recebido[1].contentEquals("edit")) {
-				daoEmpresa.updateEmpresa(recebido[2], recebido[3], recebido[4], 
-						recebido[5], recebido[6], recebido[7], recebido[8], recebido[9], recebido[10], recebido[11], out, client);
+
+			if (recebido[1].contentEquals("edit")) {
+				daoEmpresa.updateEmpresa(recebido[2], recebido[3], recebido[4], recebido[5], recebido[6], recebido[7],
+						recebido[8], recebido[9], recebido[10], recebido[11], out, client);
+			}
+		}
+
+		if (recebido[0].contentEquals("ocorrencia")) {
+			DaoOcorrencia daoOcorrencia = new DaoOcorrencia();
+			if (recebido[1].contentEquals("add")) {
+				daoOcorrencia.addOcorrencia(recebido[2], recebido[3], recebido[4], recebido[5], recebido[6],
+						recebido[7], recebido[8], recebido[9], recebido[10], out, client);
+			}
+
+			if (recebido[1].contentEquals("getAll")) {
+				daoOcorrencia.getAllOcorrenciaSubmitClient(out, client);
 			}
 		}
 

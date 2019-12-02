@@ -97,16 +97,6 @@ public class DaoUsuario {
 
 	}
 
-	public void addUsuario(Usuario usuario) {
-		EntityManager em = Conn.getEntityManager();
-		em.getTransaction().begin();
-		em.persist(usuario);
-		em.getTransaction().commit();
-		em.close();
-		// MessageAlert.mensagemRealizadoSucesso(StringUtility.createUser);
-	}
-
-
 	public void editNameUsuario(String idUsuario, String newName, String senha, ObjectOutputStream out, Socket client)
 			throws IOException {
 
@@ -215,10 +205,6 @@ public class DaoUsuario {
 		out.writeUTF(mensagem);
 		System.out.println("Pacote de dados enviado para cliente: " + mensagem);
 
-	}
-
-	public List<Usuario> getListUsuario() {
-		return listUsuario;
 	}
 
 }
