@@ -7,14 +7,13 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.jboss.logging.Message;
+
 import br.edu.ifsc.canoinhas.server.entities.Empresa;
 import br.edu.ifsc.canoinhas.server.entities.Endereco;
-import br.edu.ifsc.canoinhas.server.entities.Projeto;
-import br.edu.ifsc.canoinhas.server.entities.Usuario;
 import br.edu.ifsc.canoinhas.server.utility.StringUtility;
 
 public class DaoEmpresa {
-	private List<Empresa> listEmpresa;
 
 	public void getAllEmpresaSubmitClient(ObjectOutputStream out, Socket client) throws IOException {
 
@@ -35,11 +34,10 @@ public class DaoEmpresa {
 		} else {
 			for (Empresa empresa : listEmpresa) {
 				mensagem = mensagem.concat("-" + empresa.getId() + ";" + empresa.getNome() + ";" + empresa.getCnpj()
-						+ empresa.getEndereco().getId() + ";" + empresa.getEndereco().getBairro() + ";"
-						+ empresa.getEndereco().getCep() + ";" + empresa.getEndereco().getCidade() + ";"
-						+ empresa.getEndereco().getComplemento() + ";" + empresa.getEndereco().getEstado() + ";"
-						+ empresa.getEndereco().getNumero() + ";" + empresa.getEndereco().getRua() + ";"
-						+ empresa.getEndereco().getTelefone()
+						+ ";" + empresa.getEndereco().getId() + ";" + empresa.getEndereco().getRua() + ";"
+						+ empresa.getEndereco().getBairro() + ";" + empresa.getEndereco().getNumero() + ";"
+						+ empresa.getEndereco().getEstado() + ";" + empresa.getEndereco().getCep() + ";"
+						+ empresa.getEndereco().getCidade() + ";" + empresa.getEndereco().getTelefone()
 
 				);
 			}
@@ -54,8 +52,7 @@ public class DaoEmpresa {
 
 	}
 
-	public void addEmpresa(String nome, String cnpj, String rua, 
-			String bairro, String numero, String telefone,
+	public void addEmpresa(String nome, String cnpj, String rua, String bairro, String numero, String telefone,
 			String estado, String cep, String cidade, ObjectOutputStream out, Socket client) throws IOException {
 
 		EntityManager em = Conn.getEntityManager();
@@ -69,9 +66,9 @@ public class DaoEmpresa {
 			System.out.println("------------------------------------------------------");
 
 			Endereco endereco = new Endereco(rua, bairro, numero, estado, cep, cidade, telefone, "");
-			
+
 			Empresa empresa = new Empresa(nome, cnpj, endereco);
-			
+
 			em.getTransaction().begin();
 			em.persist(empresa);
 			em.getTransaction().commit();
@@ -100,56 +97,88 @@ public class DaoEmpresa {
 		return listEmpresa;
 	}
 
-	public void addEmpresa(Empresa empresa) {
-		EntityManager em = Conn.getEntityManager();
-		em.getTransaction().begin();
-		em.persist(empresa);
-		em.getTransaction().commit();
-		em.close();
-	}
+	public void removeEmpresa(String idEmpresa, ObjectOutputStream out, Socket client) throws IOException {
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+		System.out.println("Realizando consulta no Banco de Dados");
 
-	private void loadDBListEmpresa() {
-		EntityManager em = Conn.getEntityManager();
-		listEmpresa = em.createQuery("SELECT e FROM Empresa AS e", Empresa.class).getResultList();
-		em.close();
-	}
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+		System.out.println("Removendo empresa do Banco de Dados");
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
 
-	public void deleteEmpresa(Empresa empresa) {
 		EntityManager em = Conn.getEntityManager();
+
 		em.getTransaction().begin();
-		Empresa empresaSearch = em.find(Empresa.class, empresa.getId());
+
+		Empresa empresaSearch = em.find(Empresa.class, Integer.parseInt(idEmpresa));
 		em.remove(empresaSearch);
 		em.getTransaction().commit();
 		em.close();
+
+		String mensagem = "404";
+
+		if (empresaSearch != null) {
+			mensagem = "Ok";
+
+		}
+		System.out.println("------------------------------------------------------");
+		System.out.println("Enviando pacote de dados de confirmação para cliente: "
+				+ client.getInetAddress().getHostAddress() + "  Host Name: " + client.getInetAddress().getHostName());
+		System.out.println("------------------------------------------------------");
+
+		System.out.println("Pacote de dados enviado para cliente: " + mensagem);
+		out.writeUTF(mensagem);
 	}
 
-	public void updateEmpresa(Empresa empresa) {
+	public void updateEmpresa(String id, String nome, String cnpj, String rua, String bairro, String numero,
+			String telefone, String estado, String cep, String cidade, ObjectOutputStream out, Socket client)
+			throws IOException {
+
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+		System.out.println("Realizando consulta no Banco de Dados");
+
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
+		System.out.println("Atualizando dados da empresa no Banco de Dados");
+		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");
 
 		EntityManager em = Conn.getEntityManager();
 
 		em.getTransaction().begin();
 
-		Empresa empresaSearch = em.find(Empresa.class, empresa.getId());
+		Empresa empresaSearch = em.find(Empresa.class, Integer.parseInt(id));
 
-		empresaSearch.setCnpj(empresa.getCnpj());
-		empresaSearch.setNome(empresa.getNome());
+		empresaSearch.setCnpj(cnpj);
+		empresaSearch.setNome(nome);
 
-		empresaSearch.getEndereco().setBairro(empresa.getEndereco().getBairro());
-		empresaSearch.getEndereco().setCep(empresa.getEndereco().getCep());
-		empresaSearch.getEndereco().setCidade(empresa.getEndereco().getCidade());
-		empresaSearch.getEndereco().setEstado(empresa.getEndereco().getEstado());
-		empresaSearch.getEndereco().setNumero(empresa.getEndereco().getNumero());
-		empresaSearch.getEndereco().setRua(empresa.getEndereco().getRua());
-		empresaSearch.getEndereco().setTelefone(empresa.getEndereco().getTelefone());
+		empresaSearch.getEndereco().setBairro(bairro);
+		empresaSearch.getEndereco().setCep(cep);
+		empresaSearch.getEndereco().setCidade(cidade);
+		empresaSearch.getEndereco().setEstado(estado);
+		empresaSearch.getEndereco().setNumero(numero);
+		empresaSearch.getEndereco().setRua(rua);
+		empresaSearch.getEndereco().setTelefone(telefone);
 
 		System.out.println("Empresa BD:" + empresaSearch);
 		em.getTransaction().commit();
 		em.close();
-	}
 
-	public List<Empresa> getListEmpresa() {
-		loadDBListEmpresa();
-		return listEmpresa;
-	}
+		String mensagem = "404";
 
+		if (empresaSearch != null) {
+			mensagem = "Ok";
+		}
+
+		System.out.println("------------------------------------------------------");
+		System.out.println("Enviando pacote de dados de confirmação para cliente: "
+				+ client.getInetAddress().getHostAddress() + "  Host Name: " + client.getInetAddress().getHostName());
+		System.out.println("------------------------------------------------------");
+
+		System.out.println("Pacote de dados enviado para cliente: " + mensagem);
+		out.writeUTF(mensagem);
+	}
 }

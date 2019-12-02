@@ -172,6 +172,7 @@ public class Main {
 			if (recebido[1].contentEquals("remove")) {
 				daoUsuario.removeUsuario(recebido[2], out, client);
 			}
+			
 		}
 
 		if (recebido[0].contentEquals("empresa")) {
@@ -184,6 +185,15 @@ public class Main {
 			if (recebido[1].contentEquals("add")) {
 				daoEmpresa.addEmpresa(recebido[2], recebido[3], recebido[4], recebido[5], recebido[6], recebido[7],
 						recebido[8], recebido[9], recebido[10], out, client);
+			}
+
+			if (recebido[1].contentEquals("remove")) {
+				daoEmpresa.removeEmpresa(recebido[2], out, client);
+			}
+			
+			if(recebido[1].contentEquals("edit")) {
+				daoEmpresa.updateEmpresa(recebido[2], recebido[3], recebido[4], 
+						recebido[5], recebido[6], recebido[7], recebido[8], recebido[9], recebido[10], recebido[11], out, client);
 			}
 		}
 
