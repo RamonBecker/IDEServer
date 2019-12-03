@@ -92,9 +92,8 @@ public class DaoDBProjeto {
 						mensagem = mensagem.concat(pacote.getId() + "," + pacote.getNome() + ",");
 
 						for (Classe classe : pacote.getListClasse()) {
-							mensagem = mensagem.concat(classe.getId() + "/" + classe.getNome() +"/"+classe.getTypeClasse()+"/" +
-							classe.getMain()+
-									",");
+							mensagem = mensagem.concat(classe.getId() + "/" + classe.getNome() + "/"
+									+ classe.getTypeClasse() + "/" + classe.getMain() + ",");
 						}
 					}
 				}
@@ -117,65 +116,69 @@ public class DaoDBProjeto {
 
 	public void addFirstProjeto() {
 
-		Projeto projeto = new Projeto("Meu projeto de teste", "loca/projeto");
+		List<Projeto> listProjetos = getAllProjeto();
 
-		Pacote pacote = new Pacote("Meu pacote de teste");
+		boolean ok = false;
+		for (Projeto projeto : listProjetos) {
+			if (projeto.getNome().equals("Meu projeto de teste")) {
+				ok = true;
+			}
+		}
 
-		Classe classeCadastroEmpresa = new Classe("CadastroEmpresa");
-		classeCadastroEmpresa.setTypeClasse("public");
-		classeCadastroEmpresa.main("0");
+		if (!ok) {
 
-		Classe classeLogin = new Classe("Login");
-		classeLogin.setTypeClasse("public");
-		classeLogin.main("0");
+			Projeto projeto = new Projeto("Meu projeto de teste", "loca/projeto");
 
-		Classe classeBuscarEmpresa = new Classe("Buscarempresa");
-		classeBuscarEmpresa.setTypeClasse("public");
-		classeBuscarEmpresa.main("0");
+			Pacote pacote = new Pacote("Meu pacote de teste");
 
-		Classe classePrincipal = new Classe("Principal");
-		classePrincipal.setTypeClasse("public");
-		classePrincipal.main("0");
+			Classe classeCadastroEmpresa = new Classe("CadastroEmpresa");
+			classeCadastroEmpresa.setTypeClasse("public");
+			classeCadastroEmpresa.main("0");
 
-		Classe classeRedefinirSenhaUsuario = new Classe("RedefinirSenhaUsuario");
-		classeRedefinirSenhaUsuario.setTypeClasse("public");
-		classeRedefinirSenhaUsuario.main("0");
+			Classe classeLogin = new Classe("Login");
+			classeLogin.setTypeClasse("public");
+			classeLogin.main("0");
 
-		Classe classeAtenderOcorrencia = new Classe("Atender Ocorrencia");
-		classeAtenderOcorrencia.setTypeClasse("public");
-		classeAtenderOcorrencia.main("0");
+			Classe classeBuscarEmpresa = new Classe("Buscarempresa");
+			classeBuscarEmpresa.setTypeClasse("public");
+			classeBuscarEmpresa.main("0");
 
-		Classe classeMain = new Classe("Main");
-		classeMain.setTypeClasse("public");
-		classeMain.main("1");
-//		classeCadastroEmpresa.setCodigo(StringUtility.cadastrarEmpresa);
-//		classeLogin.setCodigo(StringUtility.login);
-//		classeBuscarEmpresa.setCodigo(StringUtility.buscarEmpresa);
-//		classePrincipal.setCodigo(StringUtility.telaPrincipal);
-//		classeRedefinirSenhaUsuario.setCodigo(StringUtility.redefinirSenhaUsuario);
-//		classeAtenderOcorrencia.setCodigo(StringUtility.classeAtenderOcorrencia);
-//		classeMain.setCodigo(StringUtility.main);
+			Classe classePrincipal = new Classe("Principal");
+			classePrincipal.setTypeClasse("public");
+			classePrincipal.main("0");
 
-		pacote.setListClasse(new ArrayList<Classe>());
+			Classe classeRedefinirSenhaUsuario = new Classe("RedefinirSenhaUsuario");
+			classeRedefinirSenhaUsuario.setTypeClasse("public");
+			classeRedefinirSenhaUsuario.main("0");
 
-		pacote.addClass(classeCadastroEmpresa);
-		pacote.addClass(classeLogin);
-		pacote.addClass(classeBuscarEmpresa);
-		pacote.addClass(classePrincipal);
-		pacote.addClass(classeRedefinirSenhaUsuario);
-		pacote.addClass(classeAtenderOcorrencia);
-		pacote.addClass(classeMain);
+			Classe classeAtenderOcorrencia = new Classe("Atender Ocorrencia");
+			classeAtenderOcorrencia.setTypeClasse("public");
+			classeAtenderOcorrencia.main("0");
 
-		projeto.setListPacote(new ArrayList<Pacote>());
+			Classe classeMain = new Classe("MainProgram");
+			classeMain.setTypeClasse("public");
+			classeMain.main("1");
 
-		projeto.addPackage(pacote);
+			pacote.setListClasse(new ArrayList<Classe>());
 
-		EntityManager em = Conn.getEntityManager();
+			pacote.addClass(classeCadastroEmpresa);
+			pacote.addClass(classeLogin);
+			pacote.addClass(classeBuscarEmpresa);
+			pacote.addClass(classePrincipal);
+			pacote.addClass(classeRedefinirSenhaUsuario);
+			pacote.addClass(classeAtenderOcorrencia);
+			pacote.addClass(classeMain);
 
-		em.getTransaction().begin();
-		em.persist(projeto);
-		em.getTransaction().commit();
+			projeto.setListPacote(new ArrayList<Pacote>());
 
+			projeto.addPackage(pacote);
+
+			EntityManager em = Conn.getEntityManager();
+
+			em.getTransaction().begin();
+			em.persist(projeto);
+			em.getTransaction().commit();
+		}
 	}
 
 	public void editProject(String idProject, String newName, ObjectOutputStream out, Socket client)
