@@ -1,4 +1,4 @@
-# IDEClient
+# IDEServer
 
 > Server for IDEClient for the object-oriented programming discipline.
  
