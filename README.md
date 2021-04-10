@@ -36,7 +36,6 @@ or install github https://desktop.github.com/
 ## :zap: Technologies	
 
 - Java
-- JavaFX
 - SQLite
 - Hibernat
 
